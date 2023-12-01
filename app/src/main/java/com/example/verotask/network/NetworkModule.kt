@@ -20,7 +20,7 @@ object NetworkModule {
     }
 
     @Provides
-    fun provideTaskService(retrofit: Retrofit): TaskService {
-        return retrofit.create(TaskService::class.java)
+    fun provideTaskService(retrofit: Retrofit): ApiService {
+        return retrofit.create(ApiService::class.java)
     }
 }

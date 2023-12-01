@@ -11,7 +11,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginScreen : Fragment() {
-
     private lateinit var binding: FragmentLoginScreenBinding
 
     override fun onCreateView(
@@ -19,6 +18,10 @@ class LoginScreen : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentLoginScreenBinding.inflate(inflater, container, false)
+
+        binding.buttonLogin.setOnClickListener {
+
+        }
 
         return binding.root
     }
