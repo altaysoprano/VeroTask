@@ -8,7 +8,7 @@
     android:paddingStart="32dp"
     android:paddingEnd="32dp"
     android:paddingTop="24dp"
-    tools:context=".presentation.ui.LoginScreen">
+    tools:context=".presentation.LoginScreen">
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
         android:orientation="vertical"
         android:gravity="center"
         android:paddingTop="24dp"
-        tools:context=".presentation.ui.LoginScreen">
+        tools:context=".presentation.LoginScreen">
 
     <EditText
         android:id="@+id/editTextUsername"
