@@ -45,7 +45,7 @@ class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.TaskViewHol
 
             if (task.colorCode.isNotEmpty()) {
                 val color = Color.parseColor(task.colorCode)
-                val transparentColor = Color.argb(128, Color.red(color), Color.green(color), Color.blue(color))
+                val transparentColor = Color.argb(32, Color.red(color), Color.green(color), Color.blue(color))
                 binding.root.setBackgroundColor(transparentColor)
             } else {
                 binding.root.setBackgroundColor(Color.WHITE)
