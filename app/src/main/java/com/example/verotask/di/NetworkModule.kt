@@ -1,10 +1,13 @@
 package com.example.verotask.di
 
+import android.content.Context
 import com.example.verotask.data.repository.BaseRepository
 import com.example.verotask.data.repository.BaseRepositoryImp
+import com.example.verotask.util.AccessTokenDataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -14,20 +17,15 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = "https://api.baubuddy.de/dev/index.php/v1/"
-
     @Singleton
     @Provides
-    fun provideRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+    fun provideAccessTokenManager(@ApplicationContext context: Context): AccessTokenDataStore {
+        return AccessTokenDataStore(context)
     }
 
     @Singleton
     @Provides
-    fun provideYourRepository(): BaseRepository {
-        return BaseRepositoryImp()
+    fun provideBaseRepository(accessTokenDataStore: AccessTokenDataStore): BaseRepository {
+        return BaseRepositoryImp(accessTokenDataStore)
     }
 }
