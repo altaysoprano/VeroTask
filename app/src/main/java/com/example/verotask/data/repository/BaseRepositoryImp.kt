@@ -1,9 +1,5 @@
 package com.example.verotask.data.repository
 
-import android.util.Log
-import com.example.verotask.data.models.LoginRequest
-import com.example.verotask.data.models.LoginResponse
-import com.example.verotask.network.AuthApi
 import com.example.verotask.util.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -12,11 +8,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class BaseRepositoryImp(private val authApi: AuthApi): BaseRepository {
+class BaseRepositoryImp(): BaseRepository {
 
     override suspend fun getAccessToken(username: String, password: String, onResult: (Resource<String>) -> Unit) {
         withContext(Dispatchers.IO) {

@@ -51,7 +51,7 @@ class LoginScreen : Fragment() {
 
                 is Resource.Success -> {
                     binding.progressBarLogin.visibility = View.GONE
-                    Toast.makeText(requireContext(), "Giriş başarılı", Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), "Login successful", Toast.LENGTH_SHORT)
                         .show()
                 }
             }

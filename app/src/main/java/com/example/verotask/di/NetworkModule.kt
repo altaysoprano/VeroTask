@@ -2,7 +2,6 @@ package com.example.verotask.di
 
 import com.example.verotask.data.repository.BaseRepository
 import com.example.verotask.data.repository.BaseRepositoryImp
-import com.example.verotask.network.AuthApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,13 +27,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideAuthApi(retrofit: Retrofit): AuthApi {
-        return retrofit.create(AuthApi::class.java)
-    }
-
-    @Singleton
-    @Provides
-    fun provideYourRepository(authApi: AuthApi): BaseRepository {
-        return BaseRepositoryImp(authApi)
+    fun provideYourRepository(): BaseRepository {
+        return BaseRepositoryImp()
     }
 }
