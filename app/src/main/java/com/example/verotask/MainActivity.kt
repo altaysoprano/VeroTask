@@ -7,7 +7,9 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.verotask.databinding.ActivityMainBinding
 import com.example.verotask.presentation.AuthActivity
+import com.example.verotask.presentation.HomeActivity
 import com.example.verotask.util.AccessTokenDataStore
+import com.example.verotask.util.startNewActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,11 +30,9 @@ class MainActivity : AppCompatActivity() {
     private fun accessTokenCheck() {
         lifecycleScope.launch {
             val accessToken = accessTokenDataStore.getAccessToken()
-            if (accessToken.isNotEmpty()) {
-                Toast.makeText(this@MainActivity, "Giriş yapılmış!", Toast.LENGTH_SHORT).show()
-            } else {
-                navigateToLoginScreen()
-            }
+            val activity = if (accessToken.isNotEmpty()) HomeActivity::class.java else AuthActivity::class.java
+
+            startNewActivity(activity)
         }
     }
 
