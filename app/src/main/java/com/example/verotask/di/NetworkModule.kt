@@ -1,5 +1,6 @@
 package com.example.verotask.di
 
+import com.example.verotask.data.repository.BaseRepository
 import com.example.verotask.data.repository.BaseRepositoryImp
 import com.example.verotask.network.AuthApi
 import dagger.Module
@@ -33,7 +34,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideYourRepository(authApi: AuthApi): BaseRepositoryImp {
+    fun provideYourRepository(authApi: AuthApi): BaseRepository {
         return BaseRepositoryImp(authApi)
     }
 }
