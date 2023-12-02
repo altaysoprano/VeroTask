@@ -8,32 +8,26 @@ import com.example.verotask.data.models.Task
 import com.example.verotask.data.repository.BaseRepository
 import com.example.verotask.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val baseRepository: BaseRepository
 ) : ViewModel() {
-
-    private val _loginState = MutableLiveData<Resource<String>>()
-    val loginState: LiveData<Resource<String>>
-        get() = _loginState
 
     private val _getTasksState = MutableLiveData<Resource<List<Task>>>()
     val getTasksState: LiveData<Resource<List<Task>>>
         get() = _getTasksState
 
-
-    fun login(username: String, password: String) {
-        _loginState.value = Resource.Loading()
+    fun getTasks() {
+        _getTasksState.value = Resource.Loading()
 
         viewModelScope.launch {
-            baseRepository.login(username, password) { result ->
-                _loginState.postValue(result)
+            baseRepository.getTasks { result ->
+                _getTasksState.postValue(result)
             }
         }
     }
+
 }
