@@ -35,17 +35,19 @@ class HomeScreen : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeScreenBinding.inflate(inflater, container, false)
-        (activity as AppCompatActivity?)!!.title = "Home"
         (activity as AppCompatActivity).setSupportActionBar(binding.homeToolbar)
         setHasOptionsMenu(true)
 
         setupRecyclerView()
         getTasks()
+        setOnSwipe()
+        observeGetTasks()
+        observeSwiping()
 
         return binding.root
     }
 
-    private fun observeLogin() {
+    private fun observeGetTasks() {
         viewModel.getTasksState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is Resource.Loading -> {
@@ -60,10 +62,27 @@ class HomeScreen : Fragment() {
 
                 is Resource.Success -> {
                     binding.progressBarHome.visible(false)
-                    Log.d("Mesaj: ", "Successte şu an")
+                    updateList(state.data)
+                }
+            }
+        }
+    }
 
-                    Log.d("Mesaj: ", "Liste boş mu? ${state.data.isEmpty()}")
-                    Log.d("Mesaj: ", "Liste boyutu? ${state.data.size}")
+    private fun observeSwiping() {
+        viewModel.swipeState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is Resource.Loading -> {
+                    binding.swipeRefreshLayoutHome.isRefreshing = true
+                }
+
+                is Resource.Error -> {
+                    binding.swipeRefreshLayoutHome.isRefreshing = false
+                    Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                is Resource.Success -> {
+                    binding.swipeRefreshLayoutHome.isRefreshing = false
                     updateList(state.data)
                 }
             }
@@ -72,7 +91,12 @@ class HomeScreen : Fragment() {
 
     private fun getTasks() {
         viewModel.getTasks()
-        observeLogin()
+    }
+
+    private fun setOnSwipe() {
+        binding.swipeRefreshLayoutHome.setOnRefreshListener {
+            viewModel.onSwipe()
+        }
     }
 
     private fun setupRecyclerView() {

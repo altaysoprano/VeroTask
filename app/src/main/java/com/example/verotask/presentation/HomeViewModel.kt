@@ -20,12 +20,26 @@ class HomeViewModel @Inject constructor(
     val getTasksState: LiveData<Resource<List<Task>>>
         get() = _getTasksState
 
+    private val _swipeState = MutableLiveData<Resource<List<Task>>>()
+    val swipeState: LiveData<Resource<List<Task>>>
+        get() = _swipeState
+
     fun getTasks() {
         _getTasksState.value = Resource.Loading()
 
         viewModelScope.launch {
             baseRepository.getTasks { result ->
                 _getTasksState.postValue(result)
+            }
+        }
+    }
+
+    fun onSwipe() {
+        _swipeState.value = Resource.Loading()
+
+        viewModelScope.launch {
+            baseRepository.getTasks { result ->
+                _swipeState.postValue(result)
             }
         }
     }
