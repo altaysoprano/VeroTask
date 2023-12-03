@@ -13,6 +13,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
@@ -41,6 +42,7 @@ class HomeScreen : Fragment() {
         (activity as AppCompatActivity).setSupportActionBar(binding.homeToolbar)
         setHasOptionsMenu(true)
 
+        handleBackPressed()
         setSearching()
         setupRecyclerView()
         getTasks()
@@ -145,6 +147,20 @@ class HomeScreen : Fragment() {
 
         viewModel.filteredTasks.observe(viewLifecycleOwner) { filteredTasks ->
             recyclerViewAdapter.updateList(filteredTasks)
+        }
+    }
+
+    private fun handleBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            if (binding.searchEditText.isFocused) {
+                binding.searchEditText.clearFocus()
+            } else if (binding.searchEditText.text.isNotEmpty()) {
+                binding.searchEditText.text.clear()
+                binding.searchEditText.clearFocus()
+            } else {
+                isEnabled = false
+                requireActivity().onBackPressed()
+            }
         }
     }
 
