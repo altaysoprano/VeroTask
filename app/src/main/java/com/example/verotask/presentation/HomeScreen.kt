@@ -119,6 +119,7 @@ class HomeScreen : Fragment() {
 
     private fun updateList(data: List<Task>) {
         recyclerViewAdapter.updateList(data)
+        binding.noResultLayout.visibility = if (data.isEmpty()) View.VISIBLE else View.GONE
     }
 
     private fun setSearching() {
@@ -146,7 +147,7 @@ class HomeScreen : Fragment() {
         })
 
         viewModel.filteredTasks.observe(viewLifecycleOwner) { filteredTasks ->
-            recyclerViewAdapter.updateList(filteredTasks)
+            updateList(filteredTasks)
         }
     }
 
