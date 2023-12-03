@@ -67,7 +67,7 @@ class BaseRepositoryImp(private val accessTokenDataStore: AccessTokenDataStore) 
 
                     onResult(Resource.Success(tasks))
                 } else {
-                    onResult(Resource.Error("Failed to fetch tasks"))
+                    onResult(Resource.Error(if(response.message() == "Unauthorized") response.message() else "Failed to fetch tasks"))
                 }
             } catch (e: Exception) {
                 onResult(Resource.Error(e.message ?: "An error occurred"))

@@ -56,8 +56,12 @@ class HomeScreen : Fragment() {
 
                 is Resource.Error -> {
                     binding.progressBarHome.visible(false)
-                    Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT)
-                        .show()
+                    if (state.message == "Unauthorized") {
+                        requireActivity().startNewActivity(AuthActivity::class.java)
+                    } else {
+                        Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
 
                 is Resource.Success -> {
@@ -120,10 +124,12 @@ class HomeScreen : Fragment() {
 
                 true
             }
+
             R.id.menu_item_scan -> {
 
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
