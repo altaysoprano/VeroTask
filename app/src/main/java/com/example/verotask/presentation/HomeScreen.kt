@@ -1,12 +1,17 @@
 package com.example.verotask.presentation
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.verotask.R
@@ -30,6 +35,9 @@ class HomeScreen : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeScreenBinding.inflate(inflater, container, false)
+        (activity as AppCompatActivity?)!!.title = "Home"
+        (activity as AppCompatActivity).setSupportActionBar(binding.homeToolbar)
+        setHasOptionsMenu(true)
 
         setupRecyclerView()
         getTasks()
@@ -75,6 +83,25 @@ class HomeScreen : Fragment() {
 
     private fun updateList(data: List<Task>) {
         recyclerViewAdapter.updateList(data)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_home, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_item_sign_out -> {
+
+                true
+            }
+            R.id.menu_item_scan -> {
+
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 }
