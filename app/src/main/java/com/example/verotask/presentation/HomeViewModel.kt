@@ -24,6 +24,28 @@ class HomeViewModel @Inject constructor(
     val swipeState: LiveData<Resource<List<Task>>>
         get() = _swipeState
 
+    private var originalTasks: List<Task> = emptyList()
+    private val _filteredTasks = MutableLiveData<List<Task>>()
+    val filteredTasks: LiveData<List<Task>> get() = _filteredTasks
+
+    fun setOriginalTasks(tasks: List<Task>) {
+        originalTasks = tasks
+        _filteredTasks.value = tasks
+    }
+
+    fun filterTasks(query: String) {
+        val filteredList = if (query.isEmpty()) {
+            originalTasks
+        } else {
+            originalTasks.filter { task ->
+                task.title.contains(query, ignoreCase = true) ||
+                        task.description.contains(query, ignoreCase = true) ||
+                        task.task.contains(query, ignoreCase = true)
+            }
+        }
+        _filteredTasks.value = filteredList
+    }
+
     fun getTasks() {
         _getTasksState.value = Resource.Loading()
 

@@ -2,6 +2,8 @@ package com.example.verotask.presentation
 
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.verotask.R
@@ -38,6 +41,7 @@ class HomeScreen : Fragment() {
         (activity as AppCompatActivity).setSupportActionBar(binding.homeToolbar)
         setHasOptionsMenu(true)
 
+        setSearching()
         setupRecyclerView()
         getTasks()
         setOnSwipe()
@@ -66,6 +70,7 @@ class HomeScreen : Fragment() {
 
                 is Resource.Success -> {
                     binding.progressBarHome.visible(false)
+                    viewModel.setOriginalTasks(state.data)
                     updateList(state.data)
                 }
             }
@@ -87,6 +92,7 @@ class HomeScreen : Fragment() {
 
                 is Resource.Success -> {
                     binding.swipeRefreshLayoutHome.isRefreshing = false
+                    viewModel.setOriginalTasks(state.data)
                     updateList(state.data)
                 }
             }
@@ -111,6 +117,35 @@ class HomeScreen : Fragment() {
 
     private fun updateList(data: List<Task>) {
         recyclerViewAdapter.updateList(data)
+    }
+
+    private fun setSearching() {
+        binding.searchEditText.addTextChangedListener { text ->
+            viewModel.filterTasks(text.toString())
+        }
+
+        binding.clearSearch.setOnClickListener {
+            binding.searchEditText.text.clear()
+        }
+
+        binding.searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val isVisible = s?.isNotEmpty() ?: false
+                binding.clearSearch.visibility = if (isVisible) View.VISIBLE else View.GONE
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+        })
+
+        viewModel.filteredTasks.observe(viewLifecycleOwner) { filteredTasks ->
+            recyclerViewAdapter.updateList(filteredTasks)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
