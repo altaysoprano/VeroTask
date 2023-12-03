@@ -1,6 +1,7 @@
 package com.example.verotask.di
 
 import android.content.Context
+import com.example.verotask.data.local.AppDatabase
 import com.example.verotask.data.repository.BaseRepository
 import com.example.verotask.data.repository.BaseRepositoryImp
 import com.example.verotask.util.AccessTokenDataStore
@@ -25,7 +26,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideBaseRepository(accessTokenDataStore: AccessTokenDataStore): BaseRepository {
-        return BaseRepositoryImp(accessTokenDataStore)
+    fun provideBaseRepository(accessTokenDataStore: AccessTokenDataStore, appDatabase: AppDatabase): BaseRepository {
+        return BaseRepositoryImp(accessTokenDataStore, appDatabase)
     }
 }

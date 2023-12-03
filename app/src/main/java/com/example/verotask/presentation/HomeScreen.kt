@@ -80,7 +80,7 @@ class HomeScreen : Fragment() {
     }
 
     private fun observeSwiping() {
-        viewModel.swipeState.observe(viewLifecycleOwner) { state ->
+        viewModel.updateTasksState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is Resource.Loading -> {
                     binding.swipeRefreshLayoutHome.isRefreshing = true
@@ -107,7 +107,8 @@ class HomeScreen : Fragment() {
 
     private fun setOnSwipe() {
         binding.swipeRefreshLayoutHome.setOnRefreshListener {
-            viewModel.onSwipe()
+            Log.d("Mesaj: ", "Screende updatee girdi")
+            viewModel.updateTasks()
         }
     }
 
@@ -172,11 +173,6 @@ class HomeScreen : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.menu_item_sign_out -> {
-
-                true
-            }
-
             R.id.menu_item_scan -> {
 
                 true

@@ -7,4 +7,6 @@ interface BaseRepository {
     suspend fun login(username: String, password: String, onResult: (Resource<String>) -> Unit)
 
     suspend fun getTasks(onResult: (Resource<List<Task>>) -> Unit)
+
+    suspend fun updateTasks(onResult: (Resource<List<Task>>) -> Unit)
 }

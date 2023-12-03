@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.verotask.data.local.AppDatabase
 import com.example.verotask.data.models.Task
 import com.example.verotask.data.repository.BaseRepository
 import com.example.verotask.util.Resource
@@ -13,16 +14,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val baseRepository: BaseRepository
+    private val baseRepository: BaseRepository,
+    private val database: AppDatabase
 ) : ViewModel() {
 
     private val _getTasksState = MutableLiveData<Resource<List<Task>>>()
     val getTasksState: LiveData<Resource<List<Task>>>
         get() = _getTasksState
 
-    private val _swipeState = MutableLiveData<Resource<List<Task>>>()
-    val swipeState: LiveData<Resource<List<Task>>>
-        get() = _swipeState
+    private val _updateTasksState = MutableLiveData<Resource<List<Task>>>()
+    val updateTasksState: LiveData<Resource<List<Task>>>
+        get() = _updateTasksState
 
     private var originalTasks: List<Task> = emptyList()
     private val _filteredTasks = MutableLiveData<List<Task>>()
@@ -56,12 +58,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onSwipe() {
-        _swipeState.value = Resource.Loading()
+    fun updateTasks() {
+        _updateTasksState.value = Resource.Loading()
 
         viewModelScope.launch {
-            baseRepository.getTasks { result ->
-                _swipeState.postValue(result)
+            baseRepository.updateTasks { result ->
+                _updateTasksState.postValue(result)
             }
         }
     }
