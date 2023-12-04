@@ -12,4 +12,7 @@ interface TaskDao {
 
     @Query("SELECT * FROM tasks")
     fun getTasks(): List<LocalTask>
+
+    @Query("DELETE FROM tasks")
+    fun deleteAllTasks()
 }

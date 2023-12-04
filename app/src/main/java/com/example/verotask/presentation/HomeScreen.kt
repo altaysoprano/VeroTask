@@ -31,6 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeScreen : Fragment() {
 
     private lateinit var binding: FragmentHomeScreenBinding
+    private var searchText: String = ""
     private val viewModel: HomeViewModel by viewModels()
     private lateinit var recyclerViewAdapter: RecyclerViewAdapter
 
@@ -96,6 +97,7 @@ class HomeScreen : Fragment() {
                     binding.swipeRefreshLayoutHome.isRefreshing = false
                     viewModel.setOriginalTasks(state.data)
                     updateList(state.data)
+                    viewModel.filterTasks(searchText)
                 }
             }
         }
@@ -107,7 +109,6 @@ class HomeScreen : Fragment() {
 
     private fun setOnSwipe() {
         binding.swipeRefreshLayoutHome.setOnRefreshListener {
-            Log.d("Mesaj: ", "Screende updatee girdi")
             viewModel.updateTasks()
         }
     }
@@ -125,7 +126,8 @@ class HomeScreen : Fragment() {
 
     private fun setSearching() {
         binding.searchEditText.addTextChangedListener { text ->
-            viewModel.filterTasks(text.toString())
+            searchText = text.toString()
+            viewModel.filterTasks(searchText)
         }
 
         binding.clearSearch.setOnClickListener {
