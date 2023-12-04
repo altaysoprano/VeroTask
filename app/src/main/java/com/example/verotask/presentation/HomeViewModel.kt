@@ -37,7 +37,6 @@ class HomeViewModel @Inject constructor(
     }
 
     fun filterTasks(query: String) {
-        Log.d("Mesaj: ", "Viewmodelda filterTasks çalıştı")
         val filteredList = if (query.isEmpty()) {
             originalTasks
         } else {

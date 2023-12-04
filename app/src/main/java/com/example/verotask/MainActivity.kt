@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
     private fun accessTokenCheck() {
         lifecycleScope.launch {
             val accessToken = accessTokenDataStore.getAccessToken()
-            Log.d("Mesaj: ", "Access Token: $accessToken")
             val activity = if (accessToken.isNotEmpty()) HomeActivity::class.java else AuthActivity::class.java
 
             startNewActivity(activity)

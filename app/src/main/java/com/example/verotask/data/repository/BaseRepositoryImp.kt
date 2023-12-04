@@ -122,7 +122,7 @@ class BaseRepositoryImp(
                 } else {
                     val localTasks = appDatabase.taskDao().getTasks().map { it.toTask() }
                     if (localTasks.isNotEmpty()) {
-                        onResult(Resource.Success(localTasks))
+                        onResult(Resource.Error(message = if(response.message() == "Unauthorized") response.message() else "Failed to fetch tasks", data = localTasks))
                     } else {
                         onResult(Resource.Error(if(response.message() == "Unauthorized") response.message() else "Failed to fetch tasks"))
                     }

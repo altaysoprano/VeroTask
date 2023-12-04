@@ -91,8 +91,15 @@ class HomeScreen : Fragment() {
 
                 is Resource.Error -> {
                     binding.swipeRefreshLayoutHome.isRefreshing = false
-                    Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT)
-                        .show()
+                    if (state.message == "Unauthorized") {
+                        requireActivity().startNewActivity(AuthActivity::class.java)
+                    } else {
+                        state.data?.let { viewModel.setOriginalTasks(it) }
+                        state.data?.let { updateList(it) }
+                        viewModel.filterTasks(searchText)
+                        Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
 
                 is Resource.Success -> {
@@ -104,18 +111,6 @@ class HomeScreen : Fragment() {
             }
         }
     }
-
-/*
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val qrResult = arguments?.getString("qrResult")
-        if (!qrResult.isNullOrEmpty()) {
-            binding.searchEditText.setText(qrResult.toString())
-            searchText = qrResult.toString()
-            viewModel.filterTasks(searchText)
-        }
-    }
-*/
 
     private fun getQrCodeResults() {
         val qrResult = arguments?.getString("qrResult")
@@ -154,7 +149,12 @@ class HomeScreen : Fragment() {
         }
 
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
 
             }
 
@@ -171,8 +171,6 @@ class HomeScreen : Fragment() {
         })
 
         viewModel.filteredTasks.observe(viewLifecycleOwner) { filteredTasks ->
-            Log.d("Mesaj: ", "Observe'e girdi")
-            Log.d("Mesaj: ", "filteredTasks.size: ${filteredTasks.size}")
             updateList(filteredTasks)
         }
     }
