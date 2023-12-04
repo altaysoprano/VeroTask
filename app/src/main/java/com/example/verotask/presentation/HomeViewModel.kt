@@ -1,5 +1,6 @@
 package com.example.verotask.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,6 +37,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun filterTasks(query: String) {
+        Log.d("Mesaj: ", "Viewmodelda filterTasks çalıştı")
         val filteredList = if (query.isEmpty()) {
             originalTasks
         } else {

@@ -17,5 +17,9 @@
     <fragment
         android:id="@+id/scanScreen"
         android:name="com.example.verotask.presentation.ScanScreen"
-        android:label="ScanScreen" />
+        android:label="ScanScreen" >
+        <action
+            android:id="@+id/action_scanScreen_to_homeScreen"
+            app:destination="@id/homeScreen" />
+    </fragment>
 </navigation>

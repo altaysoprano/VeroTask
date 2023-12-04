@@ -76,6 +76,7 @@ class HomeScreen : Fragment() {
                     binding.progressBarHome.visible(false)
                     viewModel.setOriginalTasks(state.data)
                     updateList(state.data)
+                    getQrCodeResults()
                 }
             }
         }
@@ -104,6 +105,27 @@ class HomeScreen : Fragment() {
         }
     }
 
+/*
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val qrResult = arguments?.getString("qrResult")
+        if (!qrResult.isNullOrEmpty()) {
+            binding.searchEditText.setText(qrResult.toString())
+            searchText = qrResult.toString()
+            viewModel.filterTasks(searchText)
+        }
+    }
+*/
+
+    private fun getQrCodeResults() {
+        val qrResult = arguments?.getString("qrResult")
+        if (!qrResult.isNullOrEmpty()) {
+            binding.searchEditText.setText(qrResult.toString())
+            searchText = qrResult.toString()
+            viewModel.filterTasks(searchText)
+        }
+    }
+
     private fun getTasks() {
         viewModel.getTasks()
     }
@@ -126,10 +148,6 @@ class HomeScreen : Fragment() {
     }
 
     private fun setSearching() {
-        binding.searchEditText.addTextChangedListener { text ->
-            searchText = text.toString()
-            viewModel.filterTasks(searchText)
-        }
 
         binding.clearSearch.setOnClickListener {
             binding.searchEditText.text.clear()
@@ -143,6 +161,8 @@ class HomeScreen : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val isVisible = s?.isNotEmpty() ?: false
                 binding.clearSearch.visibility = if (isVisible) View.VISIBLE else View.GONE
+                searchText = s.toString()
+                viewModel.filterTasks(searchText)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -151,6 +171,8 @@ class HomeScreen : Fragment() {
         })
 
         viewModel.filteredTasks.observe(viewLifecycleOwner) { filteredTasks ->
+            Log.d("Mesaj: ", "Observe'e girdi")
+            Log.d("Mesaj: ", "filteredTasks.size: ${filteredTasks.size}")
             updateList(filteredTasks)
         }
     }

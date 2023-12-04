@@ -10,12 +10,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.budiyev.android.codescanner.AutoFocusMode
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.CodeScannerView
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
+import com.example.verotask.R
 import com.example.verotask.databinding.FragmentScanScreenBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -71,7 +73,11 @@ class ScanScreen : Fragment() {
 
         codeScanner.decodeCallback = DecodeCallback {
             lifecycleScope.launch(Dispatchers.Main) {
-                Toast.makeText(requireContext(), "Scan result: ${it.text}", Toast.LENGTH_LONG).show()
+                val navController = findNavController()
+                val bundle = Bundle()
+                bundle.putString("qrResult", it.text)
+
+                navController.navigate(R.id.action_scanScreen_to_homeScreen, bundle)
             }
         }
 
@@ -98,6 +104,7 @@ class ScanScreen : Fragment() {
                 setScanner()
             } else {
                 Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_SHORT).show()
+                findNavController().popBackStack()
             }
         }
     }

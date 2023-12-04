@@ -15,6 +15,7 @@ class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.TaskViewHol
     private var tasks: MutableList<Task> = mutableListOf()
 
     fun updateList(newList: List<Task>) {
+        Log.d("Mesaj: ", "Recyclerview update listte")
         tasks.clear()
         tasks.addAll(newList)
         notifyDataSetChanged()
