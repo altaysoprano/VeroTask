@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.verotask.R
 import com.example.verotask.data.models.Task
 import com.example.verotask.databinding.FragmentHomeScreenBinding
+import com.example.verotask.util.RefreshWorker
 import com.example.verotask.util.Resource
 import com.example.verotask.util.enable
 import com.example.verotask.util.startNewActivity
@@ -53,6 +54,10 @@ class HomeScreen : Fragment() {
         observeSwiping()
 
         return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
     }
 
     private fun observeGetTasks() {
