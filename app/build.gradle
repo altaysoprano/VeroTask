@@ -98,10 +98,12 @@ dependencies {
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 
     // Room
-    // Room kütüphanesi için gerekli olan dependencies ekle
     implementation "androidx.room:room-runtime:2.4.0"
     implementation "androidx.room:room-ktx:2.4.0"
     kapt "androidx.room:room-compiler:2.4.0"
+
+    //QR-Code Scanner
+    implementation 'com.github.yuriy-budiyev:code-scanner:2.3.0'
 
 }
 

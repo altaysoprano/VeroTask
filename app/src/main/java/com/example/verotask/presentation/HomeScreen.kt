@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import androidx.navigation.fragment.findNavController
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -176,7 +177,8 @@ class HomeScreen : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_scan -> {
-
+                val navController = this.findNavController()
+                navController.navigate(R.id.action_homeScreen_to_scanScreen)
                 true
             }
 
