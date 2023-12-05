@@ -18,22 +18,25 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        startRefreshWorker()
+        init(force = false)
     }
 
-     private fun startRefreshWorker() {
-            Log.d("Mesaj: ", "Startrefresh başladı")
-            val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
+    private fun init(force: Boolean) {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
 
-            val refreshWorkerRequest = PeriodicWorkRequestBuilder<RefreshWorker>(
-                repeatInterval = 15,
-                repeatIntervalTimeUnit = TimeUnit.MINUTES
-            )
-                .setConstraints(constraints)
-                .build()
+        val refreshWorkerRequest = PeriodicWorkRequestBuilder<RefreshWorker>(
+            repeatInterval = 15,
+            repeatIntervalTimeUnit = TimeUnit.MINUTES
+        )
+            .setConstraints(constraints)
+            .build()
 
-            WorkManager.getInstance(this).enqueue(refreshWorkerRequest)
-        }
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "refreshWorker",
+            if (force) androidx.work.ExistingPeriodicWorkPolicy.REPLACE else androidx.work.ExistingPeriodicWorkPolicy.KEEP,
+            refreshWorkerRequest
+        )
+    }
 }
