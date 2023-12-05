@@ -22,12 +22,19 @@ class BaseRepositoryImp(
     private val appDatabase: AppDatabase
 ) : BaseRepository {
 
-    override suspend fun login(username: String, password: String, onResult: (Resource<String>) -> Unit) {
+    override suspend fun login(
+        username: String,
+        password: String,
+        onResult: (Resource<String>) -> Unit
+    ) {
         withContext(Dispatchers.IO) {
             try {
                 val client = OkHttpClient()
                 val mediaType = MediaType.parse("application/json")
-                val body = RequestBody.create(mediaType, "{\"username\":\"$username\",\"password\":\"$password\"}")
+                val body = RequestBody.create(
+                    mediaType,
+                    "{\"username\":\"$username\",\"password\":\"$password\"}"
+                )
                 val request = Request.Builder()
                     .url("https://api.baubuddy.de/index.php/login")
                     .post(body)
@@ -54,23 +61,30 @@ class BaseRepositoryImp(
 
     override suspend fun getTasks(onResult: (Resource<List<Task>>) -> Unit) {
         return withContext(Dispatchers.IO) {
+            val accessToken = accessTokenDataStore.getAccessToken()
+
+            val client = OkHttpClient()
+            val request = Request.Builder()
+                .url("https://api.baubuddy.de/dev/index.php/v1/tasks/select")
+                .get()
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer $accessToken")
+                .build()
+
             val localTasks = appDatabase.taskDao().getTasks()
 
             if (localTasks.isNotEmpty()) {
                 val tasks = localTasks.map { it.toTask() }
-                onResult(Resource.Success(tasks))
+                val response = client.newCall(request).execute()
+
+                // Here, we're making this call solely to check if the user is currently logged in, and fetching the data from the local database.
+                if (response.isSuccessful) {
+                    onResult(Resource.Success(tasks))
+                } else {
+                    onResult(Resource.Error(if (response.message() == "Unauthorized") response.message() else "Failed to fetch tasks"))
+                }
             } else {
                 try {
-                    val accessToken = accessTokenDataStore.getAccessToken()
-
-                    val client = OkHttpClient()
-                    val request = Request.Builder()
-                        .url("https://api.baubuddy.de/dev/index.php/v1/tasks/select")
-                        .get()
-                        .addHeader("Content-Type", "application/json")
-                        .addHeader("Authorization", "Bearer $accessToken")
-                        .build()
-
                     val response = client.newCall(request).execute()
 
                     if (response.isSuccessful) {
@@ -84,7 +98,7 @@ class BaseRepositoryImp(
 
                         onResult(Resource.Success(tasks))
                     } else {
-                        onResult(Resource.Error(if(response.message() == "Unauthorized") response.message() else "Failed to fetch tasks"))
+                        onResult(Resource.Error(if (response.message() == "Unauthorized") response.message() else "Failed to fetch tasks"))
                     }
                 } catch (e: Exception) {
                     onResult(Resource.Error(e.message ?: "An error occurred"))
@@ -114,17 +128,22 @@ class BaseRepositoryImp(
 
                     appDatabase.taskDao().deleteAllTasks()
 
-                    val localTasks = tasks.map { it.toLocalTask()}
+                    val localTasks = tasks.map { it.toLocalTask() }
                     appDatabase.taskDao().insertTasks(localTasks)
 
-                    val refreshedTasks = appDatabase.taskDao().getTasks().map {it.toTask()}
+                    val refreshedTasks = appDatabase.taskDao().getTasks().map { it.toTask() }
                     onResult(Resource.Success(refreshedTasks))
                 } else {
                     val localTasks = appDatabase.taskDao().getTasks().map { it.toTask() }
                     if (localTasks.isNotEmpty()) {
-                        onResult(Resource.Error(message = if(response.message() == "Unauthorized") response.message() else "Failed to fetch tasks", data = localTasks))
+                        onResult(
+                            Resource.Error(
+                                message = if (response.message() == "Unauthorized") response.message() else "Failed to fetch tasks",
+                                data = localTasks
+                            )
+                        )
                     } else {
-                        onResult(Resource.Error(if(response.message() == "Unauthorized") response.message() else "Failed to fetch tasks"))
+                        onResult(Resource.Error(if (response.message() == "Unauthorized") response.message() else "Failed to fetch tasks"))
                     }
                 }
             } catch (e: Exception) {
@@ -154,7 +173,8 @@ class BaseRepositoryImp(
             val preplanningBoardQuickSelect = taskObj.opt("preplanningBoardQuickSelect")
             val colorCode = taskObj.getString("colorCode")
             val workingTime = taskObj.opt("workingTime")
-            val isAvailableInTimeTrackingKioskMode = taskObj.getBoolean("isAvailableInTimeTrackingKioskMode")
+            val isAvailableInTimeTrackingKioskMode =
+                taskObj.getBoolean("isAvailableInTimeTrackingKioskMode")
 
             val taskItem = Task(
                 task,

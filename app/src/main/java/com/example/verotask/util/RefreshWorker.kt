@@ -17,35 +17,14 @@ class RefreshWorker @AssistedInject constructor(
     @Assisted workerParams: WorkerParameters
 ) : Worker(context, workerParams) {
     override fun doWork(): Result {
-        Log.d("Mesaj: ", "Do work başladı")
         return try {
             runBlocking {
-                repository.updateTasks {
-                    Log.d("Mesaj: ", "update edildi içeride")
-                }
+                repository.updateTasks {}
             }
-            Log.d("Mesaj: ", "update edildi(?)")
+            Log.d("Mesaj: ", "Updated")
             Result.success()
         } catch (e: Exception) {
             Result.failure()
         }
     }
 }
-
-/*
-class RefreshWorker(
-    context: Context,
-    workerParams: WorkerParameters
-) : Worker(context, workerParams) {
-
-    override fun doWork(): Result {
-        Log.d("Mesaj: ", "dowork başladı")
-        return try {
-            Log.d("Mesaj: ", "Veriler güncellendi")
-            Result.success()
-        } catch (e: Exception) {
-            Result.failure()
-        }
-    }
-}
-*/
