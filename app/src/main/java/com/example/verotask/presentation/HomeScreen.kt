@@ -82,6 +82,7 @@ class HomeScreen : Fragment() {
                     viewModel.setOriginalTasks(state.data)
                     updateList(state.data)
                     getQrCodeResults()
+                    viewModel.filterTasks(searchText)
                 }
             }
         }
@@ -123,16 +124,20 @@ class HomeScreen : Fragment() {
             binding.searchEditText.setText(qrResult.toString())
             searchText = qrResult.toString()
             viewModel.filterTasks(searchText)
+            val updatedArgs = Bundle()
+            arguments = updatedArgs
         }
     }
 
     private fun getTasks() {
         viewModel.getTasks()
+        Log.d("Mesaj: ", "viewmodel gettasks çağırıldı")
     }
 
     private fun setOnSwipe() {
         binding.swipeRefreshLayoutHome.setOnRefreshListener {
             viewModel.updateTasks()
+            Log.d("Mesaj: ", "swipe çağrıldı")
         }
     }
 
@@ -148,7 +153,6 @@ class HomeScreen : Fragment() {
     }
 
     private fun setSearching() {
-
         binding.clearSearch.setOnClickListener {
             binding.searchEditText.text.clear()
         }

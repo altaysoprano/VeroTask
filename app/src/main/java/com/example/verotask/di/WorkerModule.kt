@@ -28,15 +28,4 @@ object WorkerModule {
     fun provideWorkerFactory(baseRepository: BaseRepository): WorkerFactory {
         return MyWorkerFactory(baseRepository)
     }
-
-    /*
-        @Provides
-        @Singleton
-        fun provideRefreshWorker(
-            @ApplicationContext context: Context,
-            workerParams: WorkerParameters
-        ): RefreshWorker {
-            return RefreshWorker(context, workerParams)
-        }
-    */
 }

@@ -27,7 +27,7 @@ class HomeActivity : AppCompatActivity() {
             .build()
 
         val refreshWorkerRequest = PeriodicWorkRequestBuilder<RefreshWorker>(
-            repeatInterval = 15,
+            repeatInterval = 60,
             repeatIntervalTimeUnit = TimeUnit.MINUTES
         )
             .setConstraints(constraints)
