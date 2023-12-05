@@ -72,6 +72,9 @@ class HomeScreen : Fragment() {
                     if (state.message == "Unauthorized") {
                         requireActivity().startNewActivity(AuthActivity::class.java)
                     } else {
+                        state.data?.let { viewModel.setOriginalTasks(it) }
+                        state.data?.let { updateList(it) }
+                        viewModel.filterTasks(searchText)
                         Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT)
                             .show()
                     }

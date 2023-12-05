@@ -75,13 +75,17 @@ class BaseRepositoryImp(
 
             if (localTasks.isNotEmpty()) {
                 val tasks = localTasks.map { it.toTask() }
-                val response = client.newCall(request).execute()
+                try {
+                    val response = client.newCall(request).execute()
 
-                // Here, we're making this call solely to check if the user is currently logged in, and fetching the data from the local database.
-                if (response.isSuccessful) {
-                    onResult(Resource.Success(tasks))
-                } else {
-                    onResult(Resource.Error(if (response.message() == "Unauthorized") response.message() else "Failed to fetch tasks"))
+                    // Here, we're making this call solely to check if the user is currently logged in, and fetching the data from the local database.
+                    if (response.isSuccessful) {
+                        onResult(Resource.Success(tasks))
+                    } else {
+                        onResult(Resource.Error(if (response.message() == "Unauthorized") response.message() else "Failed to fetch tasks"))
+                    }
+                } catch (e: Exception) {
+                    onResult(Resource.Error( "An error occurred. Maybe you are not connected to the internet.", tasks))
                 }
             } else {
                 try {
@@ -101,7 +105,7 @@ class BaseRepositoryImp(
                         onResult(Resource.Error(if (response.message() == "Unauthorized") response.message() else "Failed to fetch tasks"))
                     }
                 } catch (e: Exception) {
-                    onResult(Resource.Error(e.message ?: "An error occurred"))
+                    onResult(Resource.Error("An error occurred. Maybe you are not connected to the internet."))
                 }
             }
         }
@@ -149,7 +153,7 @@ class BaseRepositoryImp(
             } catch (e: Exception) {
                 val localTasks = appDatabase.taskDao().getTasks().map { it.toTask() }
                 if (localTasks.isNotEmpty()) {
-                    onResult(Resource.Success(localTasks))
+                    onResult(Resource.Error("An error occurred. Maybe you are not connected to the internet.", localTasks))
                 } else {
                     onResult(Resource.Error(e.message ?: "An error occurred"))
                 }
