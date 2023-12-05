@@ -10,7 +10,8 @@ getTasks is the function called when the main screen is initially opened. Here, 
 
 The application also includes a Worker that updates the data every 60 minutes. This process uses the updateTasks from the repository. Since it runs in the background, it requires the user to either swipe or re-enter the app to reflect changes in the UI.
 
-https://github.com/altaysoprano/VeroTask/assets/37440249/1ecff64e-aca8-49bb-bec0-e0389669f4b8
+https://github.com/altaysoprano/VeroTask/assets/37440249/7cdc738e-030e-40a4-a4c4-90edb194508a
+
 
 
 
