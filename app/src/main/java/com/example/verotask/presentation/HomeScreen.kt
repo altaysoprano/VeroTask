@@ -131,13 +131,11 @@ class HomeScreen : Fragment() {
 
     private fun getTasks() {
         viewModel.getTasks()
-        Log.d("Mesaj: ", "viewmodel gettasks çağırıldı")
     }
 
     private fun setOnSwipe() {
         binding.swipeRefreshLayoutHome.setOnRefreshListener {
             viewModel.updateTasks()
-            Log.d("Mesaj: ", "swipe çağrıldı")
         }
     }
 
