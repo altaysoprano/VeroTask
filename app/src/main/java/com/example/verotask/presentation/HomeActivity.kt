@@ -21,19 +21,19 @@ class HomeActivity : AppCompatActivity() {
         startRefreshWorker()
     }
 
-    private fun startRefreshWorker() {
-        Log.d("Mesaj: ", "Startrefresh başladı")
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
+     private fun startRefreshWorker() {
+            Log.d("Mesaj: ", "Startrefresh başladı")
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
 
-        val refreshWorkerRequest = PeriodicWorkRequestBuilder<RefreshWorker>(
-            repeatInterval = 15,
-            repeatIntervalTimeUnit = TimeUnit.MINUTES
-        )
-            .setConstraints(constraints)
-            .build()
+            val refreshWorkerRequest = PeriodicWorkRequestBuilder<RefreshWorker>(
+                repeatInterval = 15,
+                repeatIntervalTimeUnit = TimeUnit.MINUTES
+            )
+                .setConstraints(constraints)
+                .build()
 
-        WorkManager.getInstance(this).enqueue(refreshWorkerRequest)
-    }
+            WorkManager.getInstance(this).enqueue(refreshWorkerRequest)
+        }
 }

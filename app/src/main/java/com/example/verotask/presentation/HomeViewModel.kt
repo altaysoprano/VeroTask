@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.WorkManager
 import com.example.verotask.data.local.AppDatabase
 import com.example.verotask.data.models.Task
 import com.example.verotask.data.repository.BaseRepository
@@ -15,8 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val baseRepository: BaseRepository,
-    private val database: AppDatabase
+    private val baseRepository: BaseRepository
 ) : ViewModel() {
 
     private val _getTasksState = MutableLiveData<Resource<List<Task>>>()

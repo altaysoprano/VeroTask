@@ -6,8 +6,10 @@ import androidx.work.ListenableWorker
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import com.example.verotask.data.repository.BaseRepository
+import com.example.verotask.util.MyWorkerFactory
 import com.example.verotask.util.RefreshWorker
 import dagger.Module
 import dagger.Provides
@@ -23,10 +25,18 @@ object WorkerModule {
 
     @Provides
     @Singleton
-    fun provideRefreshWorker(
-        @ApplicationContext context: Context,
-        workerParams: WorkerParameters
-    ): RefreshWorker {
-        return RefreshWorker(context, workerParams)
+    fun provideWorkerFactory(baseRepository: BaseRepository): WorkerFactory {
+        return MyWorkerFactory(baseRepository)
     }
+
+    /*
+        @Provides
+        @Singleton
+        fun provideRefreshWorker(
+            @ApplicationContext context: Context,
+            workerParams: WorkerParameters
+        ): RefreshWorker {
+            return RefreshWorker(context, workerParams)
+        }
+    */
 }
